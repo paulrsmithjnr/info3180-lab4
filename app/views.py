@@ -26,6 +26,9 @@ def about():
     """Render the website's about page."""
     return render_template('about.html', name="Mary Jane")
 
+@app.route('/files')
+def files():
+    return render_template('files.html', filenames = get_uploaded_images())
 
 @app.route('/upload', methods=['POST', 'GET'])
 def upload():
@@ -53,6 +56,18 @@ def upload():
             flash_errors(uploadform)
 
     return render_template('upload.html', form = uploadform)
+
+def get_uploaded_images():
+    rootdir = os.getcwd()
+    filenames = []
+    print(rootdir)
+    for subdir, dirs, files in os.walk('app/static/uploads'):
+        print(dirs)
+        for name in files:
+            print(os.path.join(subdir, name))
+            filenames.append("uploads/" + name)
+    
+    return filenames
 
 
 @app.route('/login', methods=['POST', 'GET'])
